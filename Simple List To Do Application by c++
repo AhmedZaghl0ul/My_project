@@ -1,0 +1,227 @@
+#include <iostream>
+#include <ctime>
+using namespace std;
+// int ID = 0;
+class node
+{
+public:
+    node *next;
+    string tname;
+    int ID;
+
+    node()
+    {
+        tname = "New Task";
+        next = NULL;
+        ID = 0;
+    }
+};
+
+class List
+{
+private:
+    node *head = NULL;
+    int cID = 0;
+
+public:
+    bool isempty()
+    {
+        return head == NULL;
+    }
+
+    void AddTask(string tn)
+    {
+        node *nnode = new node();
+        nnode->tname = tn;
+        cID++;
+        nnode->ID = cID;
+        if (isempty())
+        {
+            head = nnode;
+        }
+        else
+        {
+            nnode->next = head;
+            head = nnode;
+        }
+        cout << "\nTask has been added successfully";
+    }
+
+    // void DeleteTask(string v)
+    // {
+    //     node *temp = head;
+    //     while (temp != NULL)
+    //     {
+    //         if (temp->next->tname == v)
+    //         {
+    //             node *toDelete = temp->next;
+    //             temp->next = temp->next->next;
+    //             delete toDelete;
+    //             cout << "\nTask '" << v << "' deleted successfully.";
+    //             return;
+    //   b      }
+    //         temp = temp->next;
+    //     }
+    // cout << "\nTask '" << v << "' not found.";
+    // }
+
+    void DeleteTask(int id)
+    {
+        if (isempty())
+        {
+            cout << "\nList is empty. No tasks to delete.";
+            return;
+        }
+
+        node *temp = head;
+        if (temp->ID == id)
+        {
+            head = temp->next;
+            string taskName = temp->tname;
+            delete temp;
+            cout << "\nTask '" << taskName << "' deleted successfully.\n";
+            return;
+        }
+
+        while (temp->next != NULL)
+        {
+            if (temp->next->ID == id)
+            {
+                node *toDelete = temp->next;
+                string taskName = toDelete->tname;
+                temp->next = temp->next->next;
+                delete toDelete;
+                cout << "\nTask '" << taskName << "' deleted successfully.";
+                return;
+            }
+            temp = temp->next;
+        }
+
+        cout << "\nTask with ID " << id << " not found.";
+    }
+
+    void search(int id)
+    {
+        node *temp = head;
+        if (isempty())
+        {
+            cout << "List is Empty\n";
+        }
+        else
+        {
+            while (temp != NULL)
+            {
+                if (temp->ID == id)
+                {
+                    cout << "Your Task is : " << temp->tname << endl;
+                    return;
+                }
+                else
+                    temp = temp->next;
+            }
+            cout << "Your Task is not contained in the List...\n";
+        }
+    }
+
+    void Update(int id)
+    {
+        string nitem;
+        node *temp = head;
+        if (isempty())
+        {
+            cout << "List is Empty\n";
+        }
+        else
+        {
+            while (temp != NULL)
+            {
+                if (temp->ID == id)
+                {
+                    cout << "Write a New Task : ";
+                    cin >> nitem;
+                    temp->tname = nitem;
+                    return;
+                }
+                else
+                    temp = temp->next;
+            }
+            cout << "Your Task is not contained in the List...\n";
+        }
+    }
+
+    void Display()
+    {
+        if (isempty())
+        {
+            cout << "\nNot contain Tasks...\n";
+        }
+        else
+        {
+            node *temp = head;
+            cout << "\n\'\'\'Your Tasks\'\'\'\n";
+            while (temp != NULL)
+            {
+                cout << "ID : " << temp->ID << "\t"
+                     << "Task : " << temp->tname << "\n";
+                temp = temp->next;
+            }
+        }
+    }
+};
+
+int main()
+{
+    List l;
+    string v;
+    int ch;
+    cout << "\n====================================\n";
+    cout << "==     To Do List Application     ==\n";
+    cout << "====================================\n";
+    while (1)
+    {
+        cout << "\n1.Add Task\n";
+        cout << "2.Delete Task\n";
+        cout << "3.Display Tasks\n";
+        cout << "4.Search Task\n";
+        cout << "5.Update Task\n";
+        cout << " \nEnter Choice : ";
+        cin >> ch;
+
+        switch (ch)
+        {
+        case 1:
+            cout << "Task is : ";
+            cin >> v;
+            // ID++;
+            l.AddTask(v);
+            break;
+        case 2:
+            int id;
+            cout << "ID : ";
+            cin >> id;
+
+            l.DeleteTask(id);
+            break;
+        case 3:
+            l.Display();
+            break;
+        case 4:
+
+            cout << "ID : ";
+            cin >> id;
+            l.search(id);
+            break;
+        case 5:
+            cout << "ID : ";
+            cin >> id;
+            l.Update(id);
+            cout << "Your Task is Updated :) \n";
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return 0;
+}
